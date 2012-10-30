@@ -1,5 +1,5 @@
 /*
-$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.h,v 1.1.1.1 2012-10-30 16:45:26 timb Exp $
+$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.h,v 1.2 2012-10-30 17:01:10 timb Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
