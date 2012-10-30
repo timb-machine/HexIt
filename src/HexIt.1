@@ -1,0 +1,71 @@
+.\" to process use the following command
+.\" groff -man -Tascii manpagename.1
+.TH HEXIT 1 "18 February 2007"
+.SH NAME
+HexIt \- a hex string generator & displayer
+.SH SYNOPSIS
+.B HexIt
+-f
+<
+.I filename
+>
+-o
+<
+.I mapoffset
+>
+-l
+<
+.I maplength
+>
+<
+-@
+<
+.I patchoffset
+>
+-s
+<
+patchstring
+>
+|
+.I -d
+[
+.I -p
+]
+>
+.SH DESCRIPTION
+.B HexIt
+is a hex string generator & displayer.
+.SH OPTIONS
+.TP 15
+.I filename
+Specifies the file name.
+.TP 15
+.I mapoffset
+Specifies the start of the mmap().
+.TP 15
+.I maplength
+Specifies how much to mmap().
+.TP 15
+.I patchoffset
+Specifies the start of the patch.
+.TP 15
+.I patchstring
+Specifies the string to patch in.
+.TP 15
+.I -d
+Specifies that the mmap()'d block should be displayed.
+.TP 15
+.I -p
+Specifies that the displayed block should be displayed as a
+.B Perl
+string.
+.SH AUTHOR
+Written by Tim Brown <mailto:timb@nth-dimension.org.uk>.
+.SH "REPORTING BUGS"
+Report bugs to Tim Brown <mailto:timb@nth-dimension.org.uk>.
+.SH COPYRIGHT
+Copyright \(co Tim Brown, 2007.
+.br
+This is free software.  You may redistribute copies of it under the terms of
+the GNU General Public License <http://www.gnu.org/licenses/gpl.html>.
+There is NO WARRANTY, to the extent permitted by law.

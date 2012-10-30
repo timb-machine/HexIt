@@ -1,0 +1,30 @@
+1.5 - 1.6
+
+* Merged with binpatch (unreleased)
+* Updated HexIt.1 with description of new features
+
+1.4 - 1.5
+
+* Added HexIt.1 man page
+* Added TODO file
+* Modified Makefile.in to install HexIt.1 man page
+* Updated HexIt.1 with description of HexIt
+
+1.3 - 1.4
+
+* Tidied up autoconf/automake
+* Changed return codes on exit
+
+1.2 - 1.3
+
+* Added HexIt.h
+* Now builds with autoconf/automake
+* Generates either C or Perl hex strings
+
+1.1 - 1.2
+
+* Fixed minor bug to eliminate lame fixed buffer size
+
+0.0 - 1.1
+
+* Initial PoC
