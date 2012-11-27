@@ -1,5 +1,5 @@
 /*
-$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.c,v 1.2 2012-10-30 17:01:10 timb Exp $
+$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.c,v 1.3 2012-11-27 20:58:56 timb Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,14 +24,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 void usage(char *commandname) {
 	if (commandname != NULL) {
-		fprintf(stderr, "%s -f <filename> -o <mapoffset> -l <maplength> <-@ <patchoffset> -s <patchstring> | -d [-p]>\n", commandname);
+		fprintf(stderr, "usage: %s -f <filename> -o <mapoffset> -l <maplength> <-@ <patchoffset> -s <patchstring> | -d [-p]>\n", commandname);
 	} else {
-		fprintf(stderr, "(null) -f <filename> -o <mapoffset> -l <maplength> <-@ <patchoffset> -s <patchstring> | -d [-p]>\n");
+		fprintf(stderr, "usage: (null) -f <filename> -o <mapoffset> -l <maplength> <-@ <patchoffset> -s <patchstring> | -d [-p]>\n");
 	}
 	exit(EXIT_FAILURE);
 }
 
-void error(char *errorstring) {
+void error(char *commandname, char *errorstring) {
 	if (errno) {
 		if (errorstring != NULL) {
 			perror(errorstring);
@@ -43,9 +43,8 @@ void error(char *errorstring) {
 			fprintf(stderr, "%s\n", errorstring);
 		}
 	}
-	exit(EXIT_FAILURE);
+	usage(commandname);
 }
-
 
 int main(int argc, char **argv) {
 	int optionflag;
@@ -97,7 +96,7 @@ int main(int argc, char **argv) {
 				perlflag = TRUE;
 				break;
 			default:
-				error(NULL);
+				error(argv[0], NULL);
 				break;
 		}
 	}
@@ -120,13 +119,13 @@ int main(int argc, char **argv) {
 									close(filehandle);
 								} else {
 									close(filehandle);
-									error("couldn't map file");
+									error(argv[0], "couldn't map file");
 								}
 							} else {
-								error("couldn't map beyond file boundary");
+								error(argv[0], "couldn't map beyond file boundary");
 							}
 						} else {
-							error("couldn't patch beyond mapped memory");
+							error(argv[0], "couldn't patch beyond mapped memory");
 						}
 					} else {
 						if (displayflag == TRUE) {
@@ -147,27 +146,27 @@ int main(int argc, char **argv) {
 									close(filehandle);
 								} else {
 									close(filehandle);
-									error("couldn't map file");
+									error(argv[0], "couldn't map file");
 									  
 								}
 							} else {
-								error("couldn't map beyond file boundary");
+								error(argv[0], "couldn't map beyond file boundary");
 							}
 						} else {
-							error("invalid patch string and display flag not set");
+							error(argv[0], "invalid patch string and display flag not set");
 						}
 					}
 				} else {
-					error("invalid map length");
+					error(argv[0], "invalid map length");
 				}
 			} else {
-				error("invalid map offset");
+				error(argv[0], "invalid map offset");
 			}
 		} else {
-			error("couldn't open file");
+			error(argv[0], "couldn't open file");
 		}
 	} else {
-		usage(argv[0]);
+		error(argv[0], "invalid file");
 	}
 	exit(EXIT_SUCCESS);
 }

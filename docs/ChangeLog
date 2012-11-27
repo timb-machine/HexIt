@@ -1,6 +1,7 @@
 1.6 - 1.7
 
 * Fixed minor bug in install target of Makefile
+* Improved error handling
 
 1.5 - 1.6
 
