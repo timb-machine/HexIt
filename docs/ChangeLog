@@ -4,6 +4,7 @@
 * Improved error handling
 * Changed mode detection to ensure patch offset is set
 * Fixed minor bug where file doesn't get closed
+* Tidied up dependencies in HexIt.h and configure.in
 
 1.5 - 1.6
 

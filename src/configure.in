@@ -6,7 +6,7 @@ AC_PATH_PROG(RM,rm)
 
 AC_LANG_C
 AC_HEADER_STDC
-AC_CHECK_HEADERS(unistd.h stdlib.h errno.h stdio.h sys/stat.h fcntl.h sys/mman.h string.h,, AC_MSG_ERROR([required header file missing]))
-AC_CHECK_FUNCS(perror printf getopt open sysconf fstat strlen mmap munmap close error fprintf exit,, AC_MSG_ERROR([required standard library function missing]))
+AC_CHECK_HEADERS(stdio.h stdlib.h errno.h unistd.h stdlib.h sys/types.h sys/stat.h fcntl.h string.h sys/mman.h,, AC_MSG_ERROR([required header file missing]))
+AC_CHECK_FUNCS(fprintf exit perror getopt atol atoi open sysconf fstat strlen mmap munmap printf close exit,, AC_MSG_ERROR([required standard library function missing]))
 
 AC_OUTPUT(Makefile)

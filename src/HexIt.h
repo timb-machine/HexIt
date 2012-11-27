@@ -1,5 +1,5 @@
 /*
-$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.h,v 1.2 2012-10-30 17:01:10 timb Exp $
+$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.h,v 1.3 2012-11-27 23:02:23 timb Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,14 +23,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef HEXIT_H
 #define HEXIT_H
 
-#include <unistd.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <stdio.h>
-#include <sys/stat.h> 
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <fcntl.h>
-#include <sys/mman.h>
 #include <string.h>
+#include <sys/mman.h>
 
 #define TRUE 1
 #define FALSE 0
