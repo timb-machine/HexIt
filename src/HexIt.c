@@ -1,5 +1,5 @@
 /*
-$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.c,v 1.3 2012-11-27 20:58:56 timb Exp $
+$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.c,v 1.4 2012-11-27 21:41:29 timb Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
 			fstat(filehandle, &filestate);
 			if ((mapoffset >= 0) && ((mapoffset % pagesize) == 0)) {
 				if ((maplength >= 0) && ((maplength % pagesize) == 0)) {
-					if (patchstring != NULL) {
+					if ((patchoffset >= 0) && (patchstring != NULL)) {
 						if ((mapoffset + patchoffset + strlen(patchstring)) <= filestate.st_size) {
 							if ((mapoffset + maplength) <= filestate.st_size) {
 								if ((mmapbuffer = mmap(NULL, maplength, PROT_READ | PROT_WRITE, MAP_SHARED, filehandle, mapoffset)) != (void *) -1) {
