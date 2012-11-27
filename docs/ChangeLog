@@ -3,6 +3,7 @@
 * Fixed minor bug in install target of Makefile
 * Improved error handling
 * Changed mode detection to ensure patch offset is set
+* Fixed minor bug where file doesn't get closed
 
 1.5 - 1.6
 

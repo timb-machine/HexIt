@@ -1,5 +1,5 @@
 /*
-$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.c,v 1.4 2012-11-27 21:41:29 timb Exp $
+$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.c,v 1.5 2012-11-27 22:53:10 timb Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -116,9 +116,7 @@ int main(int argc, char **argv) {
 										}
 									}
 									munmap(mmapbuffer, maplength);
-									close(filehandle);
 								} else {
-									close(filehandle);
 									error(argv[0], "couldn't map file");
 								}
 							} else {
@@ -143,11 +141,8 @@ int main(int argc, char **argv) {
 									}
 									printf("\n");
 									munmap(mmapbuffer, maplength);
-									close(filehandle);
 								} else {
-									close(filehandle);
 									error(argv[0], "couldn't map file");
-									  
 								}
 							} else {
 								error(argv[0], "couldn't map beyond file boundary");
@@ -162,6 +157,7 @@ int main(int argc, char **argv) {
 			} else {
 				error(argv[0], "invalid map offset");
 			}
+			close(filehandle);
 		} else {
 			error(argv[0], "couldn't open file");
 		}
