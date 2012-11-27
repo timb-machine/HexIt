@@ -1,5 +1,5 @@
 /*
-$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.c,v 1.5 2012-11-27 22:53:10 timb Exp $
+$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.c,v 1.6 2012-11-27 23:45:55 timb Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "HexIt.h"
 
 void usage(char *commandname) {
-	if (commandname != NULL) {
+	if (commandname != (char *) NULL) {
 		fprintf(stderr, "usage: %s -f <filename> -o <mapoffset> -l <maplength> <-@ <patchoffset> -s <patchstring> | -d [-p]>\n", commandname);
 	} else {
 		fprintf(stderr, "usage: (null) -f <filename> -o <mapoffset> -l <maplength> <-@ <patchoffset> -s <patchstring> | -d [-p]>\n");
@@ -33,13 +33,13 @@ void usage(char *commandname) {
 
 void error(char *commandname, char *errorstring) {
 	if (errno) {
-		if (errorstring != NULL) {
+		if (errorstring != (char *) NULL) {
 			perror(errorstring);
 		} else {
 			perror("error");
 		}
 	} else {
-		if (errorstring != NULL) {
+		if (errorstring != (char *) NULL) {
 			fprintf(stderr, "%s\n", errorstring);
 		}
 	}
@@ -62,11 +62,11 @@ int main(int argc, char **argv) {
 	int patchcounter;
 	int displaycounter;
 	optionflag = -1;
-	filename = NULL;
+	filename = (char *) NULL;
 	mapoffset = 0;
 	maplength = 0;
 	patchoffset = 0;
-	patchstring = NULL;
+	patchstring = (char *) NULL;
 	displayflag = FALSE;
 	perlflag = FALSE;
 	pagesize = 0;
@@ -96,21 +96,21 @@ int main(int argc, char **argv) {
 				perlflag = TRUE;
 				break;
 			default:
-				error(argv[0], NULL);
+				error(argv[0], (char *) NULL);
 				break;
 		}
 	}
-	if (filename != NULL) {
+	if (filename != (char *) NULL) {
 		if ((filehandle = open(filename, O_RDWR)) != -1) {
 			pagesize = sysconf(_SC_PAGE_SIZE);
 			fstat(filehandle, &filestate);
 			if ((mapoffset >= 0) && ((mapoffset % pagesize) == 0)) {
 				if ((maplength >= 0) && ((maplength % pagesize) == 0)) {
-					if ((patchoffset >= 0) && (patchstring != NULL)) {
+					if ((patchoffset >= 0) && (patchstring != (char *) NULL)) {
 						if ((mapoffset + patchoffset + strlen(patchstring)) <= filestate.st_size) {
 							if ((mapoffset + maplength) <= filestate.st_size) {
-								if ((mmapbuffer = mmap(NULL, maplength, PROT_READ | PROT_WRITE, MAP_SHARED, filehandle, mapoffset)) != (void *) -1) {
-									if (patchstring != NULL) {
+								if ((mmapbuffer = mmap((void *) NULL, maplength, PROT_READ | PROT_WRITE, MAP_SHARED, filehandle, mapoffset)) != (void *) -1) {
+									if (patchstring != (char *) NULL) {
 										for (patchcounter = 0; patchcounter < strlen(patchstring); patchcounter ++) {
 											*(((char *) mmapbuffer) + patchoffset + patchcounter) = *(patchstring + patchcounter);
 										}
@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
 					} else {
 						if (displayflag == TRUE) {
 							if ((mapoffset + maplength) <= filestate.st_size) { 
-								if ((mmapbuffer = mmap(NULL, maplength, PROT_READ | PROT_WRITE, MAP_SHARED, filehandle, mapoffset)) != (void *) -1) {
+								if ((mmapbuffer = mmap((void *) NULL, maplength, PROT_READ | PROT_WRITE, MAP_SHARED, filehandle, mapoffset)) != (void *) -1) {
 									for (displaycounter = 0; displaycounter < maplength; displaycounter ++) {
 										if (perlflag == TRUE) {
 											printf("\\x%02x", (unsigned char) *(((char *) mmapbuffer) + displaycounter));
