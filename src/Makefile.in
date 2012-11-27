@@ -24,9 +24,10 @@ HexIt.o: HexIt.c
 install: HexIt INSTALL TODO HexIt.1
 	${MKINSTALLDIRS} "${DESTDIR}${BINDIR}" "${DESTDIR}${DOCDIR}" "${DESTDIR}${MANDIR}" "${DESTDIR}${MANDIR}/man1"
 	${INSTALL} -s -m 755 -o root -g root HexIt "${DESTDIR}${BINDIR}"
+	${INSTALL} -m 644 -o root -g root ../docs/ChangeLog "${DESTDIR}${DOCDIR}"
+	${INSTALL} -m 644 -o root -g root ../docs/COPYING "${DESTDIR}${DOCDIR}"
 	${INSTALL} -m 644 -o root -g root ../docs/INSTALL "${DESTDIR}${DOCDIR}"
 	${INSTALL} -m 644 -o root -g root ../docs/TODO "${DESTDIR}${DOCDIR}"
-	${INSTALL} -m 644 -o root -g root ../docs/COPYING "${DESTDIR}${DOCDIR}"
 	${INSTALL} -m 644 -o root -g root HexIt.1 "${DESTDIR}${MANDIR}/man1"
 
 clean:
