@@ -6,6 +6,7 @@
 * Fixed minor bug where file doesn't get closed
 * Tidied up dependencies in HexIt.h and configure.in
 * Tidied up casting
+* Fixed minor bug in distclean target of Makefile
 
 1.5 - 1.6
 
