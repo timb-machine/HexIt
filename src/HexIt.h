@@ -1,5 +1,5 @@
 /*
-$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.h,v 1.4 2012-11-27 23:11:16 timb Exp $
+$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.h,v 1.5 2012-11-28 14:18:34 timb Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define TRUE 1
 #define FALSE 0
+#define PRETTYLINELENGTH 8
 
 int main(int argc, char **argv);
 

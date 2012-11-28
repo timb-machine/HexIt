@@ -1,5 +1,5 @@
 /*
-$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.c,v 1.6 2012-11-27 23:45:55 timb Exp $
+$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.c,v 1.7 2012-11-28 14:18:34 timb Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,10 +23,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "HexIt.h"
 
 void usage(char *commandname) {
+	/* TODO enable -a */
 	if (commandname != (char *) NULL) {
-		fprintf(stderr, "usage: %s -f <filename> -o <mapoffset> -l <maplength> <-@ <patchoffset> -s <patchstring> | -d [-p]>\n", commandname);
+		fprintf(stderr, "usage: %s -f <filename> -o <mapoffset> -l <maplength> <-@ <patchoffset> -s <patchstring> | -d [-p | -P]>\n", commandname);
 	} else {
-		fprintf(stderr, "usage: (null) -f <filename> -o <mapoffset> -l <maplength> <-@ <patchoffset> -s <patchstring> | -d [-p]>\n");
+		fprintf(stderr, "usage: (null) -f <filename> -o <mapoffset> -l <maplength> <-@ <patchoffset> -s <patchstring> | -d [-p | -P]>\n");
 	}
 	exit(EXIT_FAILURE);
 }
@@ -55,12 +56,18 @@ int main(int argc, char **argv) {
 	char *patchstring;
 	int displayflag;
 	int perlflag;
+	int prettyflag;
+	int analyzeflag;
 	long pagesize;
 	int filehandle;
 	struct stat filestate;
 	void *mmapbuffer;
 	int patchcounter;
 	int displaycounter;
+	int blockflag;
+	int blockstart;
+	int blockend;
+	char prettybuffer[PRETTYLINELENGTH + 1];
 	optionflag = -1;
 	filename = (char *) NULL;
 	mapoffset = 0;
@@ -69,10 +76,18 @@ int main(int argc, char **argv) {
 	patchstring = (char *) NULL;
 	displayflag = FALSE;
 	perlflag = FALSE;
+	prettyflag = FALSE;
+	analyzeflag = FALSE;
 	pagesize = 0;
 	filehandle = -1;
 	mmapbuffer = (void *) -1;
-	while ((optionflag = getopt(argc, argv, "f:o:l:@:s:dp")) != -1) {
+	patchcounter = 0;
+	displaycounter = 0;
+	blockflag = FALSE;
+	blockstart = 0;
+	blockend = 0;
+	prettybuffer[PRETTYLINELENGTH] = (char) '\x00';
+	while ((optionflag = getopt(argc, argv, "f:o:l:@:s:dpPa")) != -1) {
 		switch (optionflag) {
 			case 'f':
 				filename = optarg;
@@ -95,6 +110,13 @@ int main(int argc, char **argv) {
 			case 'p':
 				perlflag = TRUE;
 				break;
+			case 'P':
+				prettyflag = TRUE;
+				break;
+			case 'a':
+				/* TODO enable -a */
+				analyzeflag = FALSE;
+				break;
 			default:
 				error(argv[0], (char *) NULL);
 				break;
@@ -112,7 +134,7 @@ int main(int argc, char **argv) {
 								if ((mmapbuffer = mmap((void *) NULL, maplength, PROT_READ | PROT_WRITE, MAP_SHARED, filehandle, mapoffset)) != (void *) -1) {
 									if (patchstring != (char *) NULL) {
 										for (patchcounter = 0; patchcounter < strlen(patchstring); patchcounter ++) {
-											*(((char *) mmapbuffer) + patchoffset + patchcounter) = *(patchstring + patchcounter);
+											*((char *) (mmapbuffer + patchoffset + patchcounter)) = *(patchstring + patchcounter);
 										}
 									}
 									munmap(mmapbuffer, maplength);
@@ -127,19 +149,55 @@ int main(int argc, char **argv) {
 						}
 					} else {
 						if (displayflag == TRUE) {
-							if ((mapoffset + maplength) <= filestate.st_size) { 
+							if ((mapoffset + maplength) <= filestate.st_size) {
 								if ((mmapbuffer = mmap((void *) NULL, maplength, PROT_READ | PROT_WRITE, MAP_SHARED, filehandle, mapoffset)) != (void *) -1) {
 									for (displaycounter = 0; displaycounter < maplength; displaycounter ++) {
-										if (perlflag == TRUE) {
-											printf("\\x%02x", (unsigned char) *(((char *) mmapbuffer) + displaycounter));
+										if ((prettyflag == TRUE) || (analyzeflag == TRUE)) {
+											if (analyzeflag == TRUE) {
+												if ((unsigned char) *((char *) (mmapbuffer + displaycounter)) != (unsigned char) NULL) {
+													if (blockflag == FALSE) {
+														blockflag = TRUE;
+														blockstart = displaycounter;
+													}
+												} else {
+													if (blockflag == TRUE) {
+														blockflag = FALSE;
+														blockend = displaycounter;
+														/* TODO dump block details */
+														if ((blockend - blockstart) == sizeof(void *)) {
+															/* TODO dump pointer details */
+														}
+														blockstart = 0;
+														blockend = 0;
+													}
+												}
+											}
+											if ((displaycounter % PRETTYLINELENGTH) == 0) {
+												printf("0x%08x\t", mmapbuffer + displaycounter);
+											}
+											if ((displaycounter % PRETTYLINELENGTH) > 0) {
+												printf(" ");
+											}
+											if (isalnum((unsigned char) *((char *) (mmapbuffer + displaycounter)))) {
+												prettybuffer[displaycounter % PRETTYLINELENGTH] = (unsigned char) *((char *) (mmapbuffer + displaycounter));
+											} else {
+												prettybuffer[displaycounter % PRETTYLINELENGTH] = (unsigned char) '.';
+											}
+											printf("%02x", (unsigned char) *((char *) (mmapbuffer + displaycounter)));
+											if ((displaycounter % PRETTYLINELENGTH) == (PRETTYLINELENGTH - 1)) {
+												printf("\t%s\n", prettybuffer);
+											}
 										} else {
-											printf("0x%02x", (unsigned char) *(((char *) mmapbuffer) + displaycounter));
-											if ((displaycounter + 1) < maplength) {
-												printf(",");
+											if (perlflag == TRUE) {
+												printf("\\x%02x", (unsigned char) *((char *) (mmapbuffer + displaycounter)));
+											} else {
+												printf("0x%02x", (unsigned char) *((char *) (mmapbuffer + displaycounter)));
+												if ((displaycounter + 1) < maplength) {
+													printf(",");
+												}
 											}
 										}
 									}
-									printf("\n");
 									munmap(mmapbuffer, maplength);
 								} else {
 									error(argv[0], "couldn't map file");
