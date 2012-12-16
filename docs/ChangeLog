@@ -8,6 +8,7 @@
 * Tidied up casting
 * Fixed minor bug in distclean target of Makefile
 * Ported display code from smaSHeM (unreleased)
+* Tidied Makefile
 
 1.5 - 1.6
 
