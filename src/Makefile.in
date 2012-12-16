@@ -29,7 +29,7 @@ HexIt.o: HexIt.c
 	${CC} ${CFLAGS} -c HexIt.c
 
 distclean: clean
-	@${RM} -rf autom4te.cache config.cache config.log configure Makefile
+	@${RM} -rf autom4te.cache config.cache config.log config.status configure Makefile
 
 clean:
 	@${RM} -f *.o HexIt
