@@ -1,5 +1,5 @@
 /*
-$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.c,v 1.7 2012-11-28 14:18:34 timb Exp $
+$Header: /var/lib/cvsd/var/lib/cvsd/HexIt/src/HexIt.c,v 1.8 2014-11-29 19:20:23 timb Exp $
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "HexIt.h"
 
-void usage(char *commandname) {
+void usage(const char *commandname) {
 	/* TODO enable -a */
 	if (commandname != (char *) NULL) {
 		fprintf(stderr, "usage: %s -f <filename> -o <mapoffset> -l <maplength> <-@ <patchoffset> -s <patchstring> | -d [-p | -P]>\n", commandname);
@@ -32,7 +32,7 @@ void usage(char *commandname) {
 	exit(EXIT_FAILURE);
 }
 
-void error(char *commandname, char *errorstring) {
+void error(const char *commandname, const char *errorstring) {
 	if (errno) {
 		if (errorstring != (char *) NULL) {
 			perror(errorstring);
@@ -127,14 +127,14 @@ int main(int argc, char **argv) {
 			pagesize = sysconf(_SC_PAGE_SIZE);
 			fstat(filehandle, &filestate);
 			if ((mapoffset >= 0) && ((mapoffset % pagesize) == 0)) {
-				if ((maplength >= 0) && ((maplength % pagesize) == 0)) {
+				if ((maplength % pagesize) == 0) {
 					if ((patchoffset >= 0) && (patchstring != (char *) NULL)) {
 						if ((mapoffset + patchoffset + strlen(patchstring)) <= filestate.st_size) {
 							if ((mapoffset + maplength) <= filestate.st_size) {
 								if ((mmapbuffer = mmap((void *) NULL, maplength, PROT_READ | PROT_WRITE, MAP_SHARED, filehandle, mapoffset)) != (void *) -1) {
 									if (patchstring != (char *) NULL) {
 										for (patchcounter = 0; patchcounter < strlen(patchstring); patchcounter ++) {
-											*((char *) (mmapbuffer + patchoffset + patchcounter)) = *(patchstring + patchcounter);
+											*((char *) mmapbuffer + patchoffset + patchcounter) = *(patchstring + patchcounter);
 										}
 									}
 									munmap(mmapbuffer, maplength);
@@ -154,7 +154,7 @@ int main(int argc, char **argv) {
 									for (displaycounter = 0; displaycounter < maplength; displaycounter ++) {
 										if ((prettyflag == TRUE) || (analyzeflag == TRUE)) {
 											if (analyzeflag == TRUE) {
-												if ((unsigned char) *((char *) (mmapbuffer + displaycounter)) != (unsigned char) NULL) {
+												if ((unsigned char) *((char *) mmapbuffer + displaycounter) != (unsigned char) NULL) {
 													if (blockflag == FALSE) {
 														blockflag = TRUE;
 														blockstart = displaycounter;
@@ -173,25 +173,25 @@ int main(int argc, char **argv) {
 												}
 											}
 											if ((displaycounter % PRETTYLINELENGTH) == 0) {
-												printf("0x%08x\t", mmapbuffer + displaycounter);
+												printf("0x%08x\t", (int) mmapbuffer + displaycounter);
 											}
 											if ((displaycounter % PRETTYLINELENGTH) > 0) {
 												printf(" ");
 											}
-											if (isalnum((unsigned char) *((char *) (mmapbuffer + displaycounter)))) {
-												prettybuffer[displaycounter % PRETTYLINELENGTH] = (unsigned char) *((char *) (mmapbuffer + displaycounter));
+											if (isalnum((unsigned char) *((char *) mmapbuffer + displaycounter))) {
+												prettybuffer[displaycounter % PRETTYLINELENGTH] = (unsigned char) *((char *) mmapbuffer + displaycounter);
 											} else {
 												prettybuffer[displaycounter % PRETTYLINELENGTH] = (unsigned char) '.';
 											}
-											printf("%02x", (unsigned char) *((char *) (mmapbuffer + displaycounter)));
+											printf("%02x", (unsigned char) *((char *) mmapbuffer + displaycounter));
 											if ((displaycounter % PRETTYLINELENGTH) == (PRETTYLINELENGTH - 1)) {
 												printf("\t%s\n", prettybuffer);
 											}
 										} else {
 											if (perlflag == TRUE) {
-												printf("\\x%02x", (unsigned char) *((char *) (mmapbuffer + displaycounter)));
+												printf("\\x%02x", (unsigned char) *((char *) mmapbuffer + displaycounter));
 											} else {
-												printf("0x%02x", (unsigned char) *((char *) (mmapbuffer + displaycounter)));
+												printf("0x%02x", (unsigned char) *((char *) mmapbuffer + displaycounter));
 												if ((displaycounter + 1) < maplength) {
 													printf(",");
 												}
