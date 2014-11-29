@@ -1,3 +1,9 @@
+1.7 - 1.8
+
+* const'ified function parameters
+* Cleaned up void * arithmetic
+* Removed unnecessary maplength check
+
 1.6 - 1.7
 
 * Fixed minor bug in install target of Makefile
