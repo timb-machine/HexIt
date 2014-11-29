@@ -18,7 +18,7 @@ AC_LANG([C])
 # Checks for libraries.
 
 # Checks for header files.
-AC_CHECK_HEADERS([stdio.h stdlib.h errno.h unistd.h getopt.h sys/types.h sys/stat.h fcntl.h string.h sys/mman.h],, AC_MSG_ERROR([required header file missing]))
+AC_CHECK_HEADERS([stdio.h stdlib.h errno.h unistd.h sys/types.h sys/stat.h fcntl.h string.h sys/mman.h],, AC_MSG_ERROR([required header file missing]))
 
 # Checks for typedefs, structures, and compiler characteristics.
 
