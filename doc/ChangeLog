@@ -3,6 +3,7 @@
 * const'ified function parameters
 * Cleaned up void * arithmetic
 * Removed unnecessary maplength check
+* Reorganised source tree
 
 1.6 - 1.7
 
