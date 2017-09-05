@@ -34,6 +34,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include <fcntl.h>
 #include <string.h>
 #include <sys/mman.h>
+#include <ctype.h>
 
 #define TRUE 1
 #define FALSE 0
