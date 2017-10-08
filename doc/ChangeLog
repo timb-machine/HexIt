@@ -1,6 +1,7 @@
 1.8 - 1.9
 
 * Added .travis.yml for CI
+* Cleaned up char * arithmetic
 
 1.7 - 1.8
 

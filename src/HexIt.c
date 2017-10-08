@@ -134,7 +134,7 @@ int main(int argc, char **argv) {
 								if ((mmapbuffer = mmap((void *) NULL, maplength, PROT_READ | PROT_WRITE, MAP_SHARED, filehandle, mapoffset)) != (void *) -1) {
 									if (patchstring != (char *) NULL) {
 										for (patchcounter = 0; patchcounter < strlen(patchstring); patchcounter ++) {
-											*((char *) mmapbuffer + patchoffset + patchcounter) = *(patchstring + patchcounter);
+											*((char *) (mmapbuffer + patchoffset + patchcounter)) = *((char *) (patchstring + patchcounter));
 										}
 									}
 									munmap(mmapbuffer, maplength);
@@ -154,7 +154,7 @@ int main(int argc, char **argv) {
 									for (displaycounter = 0; displaycounter < maplength; displaycounter ++) {
 										if ((prettyflag == TRUE) || (analyzeflag == TRUE)) {
 											if (analyzeflag == TRUE) {
-												if ((unsigned char) *((char *) mmapbuffer + displaycounter) != (unsigned char) NULL) {
+												if ((char) *((char *) (mmapbuffer + displaycounter)) != (char) NULL) {
 													if (blockflag == FALSE) {
 														blockflag = TRUE;
 														blockstart = displaycounter;
@@ -178,20 +178,20 @@ int main(int argc, char **argv) {
 											if ((displaycounter % PRETTYLINELENGTH) > 0) {
 												printf(" ");
 											}
-											if (isalnum((unsigned char) *((char *) mmapbuffer + displaycounter))) {
-												prettybuffer[displaycounter % PRETTYLINELENGTH] = (unsigned char) *((char *) mmapbuffer + displaycounter);
+											if (isalnum((char) *((char *) (mmapbuffer + displaycounter)))) {
+												prettybuffer[displaycounter % PRETTYLINELENGTH] = (char) *((char *) (mmapbuffer + displaycounter));
 											} else {
-												prettybuffer[displaycounter % PRETTYLINELENGTH] = (unsigned char) '.';
+												prettybuffer[displaycounter % PRETTYLINELENGTH] = (char) '.';
 											}
-											printf("%02x", (unsigned char) *((char *) mmapbuffer + displaycounter));
+											printf("%02x", (char) *((char *) (mmapbuffer + displaycounter)));
 											if ((displaycounter % PRETTYLINELENGTH) == (PRETTYLINELENGTH - 1)) {
 												printf("\t%s\n", prettybuffer);
 											}
 										} else {
 											if (perlflag == TRUE) {
-												printf("\\x%02x", (unsigned char) *((char *) mmapbuffer + displaycounter));
+												printf("\\x%02x", (char) *((char *) (mmapbuffer + displaycounter)));
 											} else {
-												printf("0x%02x", (unsigned char) *((char *) mmapbuffer + displaycounter));
+												printf("0x%02x", (char) *((char *) (mmapbuffer + displaycounter)));
 												if ((displaycounter + 1) < maplength) {
 													printf(",");
 												}
