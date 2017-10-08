@@ -183,15 +183,15 @@ int main(int argc, char **argv) {
 											} else {
 												prettybuffer[displaycounter % PRETTYLINELENGTH] = (char) '.';
 											}
-											printf("%02x", (char) *((char *) (mmapbuffer + displaycounter)));
+											printf("%02x", (unsigned char) *((char *) (mmapbuffer + displaycounter)));
 											if ((displaycounter % PRETTYLINELENGTH) == (PRETTYLINELENGTH - 1)) {
 												printf("\t%s\n", prettybuffer);
 											}
 										} else {
 											if (perlflag == TRUE) {
-												printf("\\x%02x", (char) *((char *) (mmapbuffer + displaycounter)));
+												printf("\\x%02x", (unsigned char) *((char *) (mmapbuffer + displaycounter)));
 											} else {
-												printf("0x%02x", (char) *((char *) (mmapbuffer + displaycounter)));
+												printf("0x%02x", (unsigned char) *((char *) (mmapbuffer + displaycounter)));
 												if ((displaycounter + 1) < maplength) {
 													printf(",");
 												}
